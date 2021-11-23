@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas 画点</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        let canvas = document.getElementById('canvas')
+        canvas.width = document.documentElement.clientWidth
+        canvas.height = document.documentElement.clientHeight
+        let ctx = canvas.getContext('2d')
+        let painting = false
+        ctx.fillStyle = 'black'
+        ctx.strokeStyle = 'none'
+
+        let isTouchDevice = 'ontouchstart' in document.documentElement
+        if (isTouchDevice) {
+            canvas.ontouchmove = (e) => {
+                let x = e.touches[0].clientX
+                let y = e.touches[0].clientY
+                ctx.beginPath()
+                ctx.arc(x, y, 10, 0, 2 * Math.PI)
+                ctx.stroke()
+                ctx.fill()
+            }
+        }
+        else {
+            canvas.onmousedown = () => {
+                painting = true
+            }
+            canvas.onmousemove = (e) => {
+                if (painting === true) {
+                    ctx.beginPath()
+                    ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI)
+                    ctx.stroke()
+                    ctx.fill()
+                }
+            }
+
+            canvas.onmouseup = () => {
+                painting = false
+            }
+        }
+    </script>
+</body>
+
+</html>
